@@ -3,6 +3,20 @@ PrsJs
 
 A simple implementation of Promise pattern for JavaScript 
 
+					function request(url) {
+						return new Promise(function(resolve, reject) {
+							$.ajax({
+								"url" : url,
+								success : function(response) {
+									resolve(response);
+								},
+								error : function(xhr, status, e) {
+									reject(e);
+								}
+							})
+						});
+					}
+
 					var requesta = request("/fun/test/hello");
 
 					var requestc = request("/fun/test/world");
