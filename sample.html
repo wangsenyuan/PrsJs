@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<button id="startBtn">Click Me!</button>
+
+	<script type="text/javascript" src="script/Prs.js"></script>
+	<script type="text/javascript" src="script/jquery-2.1.1.js"></script>
+
+	<script type="text/javascript">
+		function request(url) {
+			return new Promise(function(resolve, reject) {
+				$.ajax({
+					"url" : url,
+					success : function(response) {
+						resolve(response);
+					},
+					error : function(xhr, status, e) {
+						reject(e);
+					}
+				})
+			});
+		}
+		$("#startBtn").click(
+				function() {
+					/*request("/fun/test/hello").on("success", function(r) {
+						console.log(r);
+					});
+					request("/fun/test/world").on("success", function(r) {
+						console.log(r);
+					});*/
+					var requesta = request("/fun/test/hello");
+
+					var requestc = request("/fun/test/world");
+
+					Promise.map2(requesta, requestc, function(a, c) {
+						return (a + "----" + c);
+					}).on("success", function(x) {
+						console.log(x);
+					});
+
+					var all = Promise.all([ requesta, requestc ]).on("success",
+							function(x) {
+								console.log(x);
+							});
+
+					var goodbye = all.flatMap(function(x) {
+						console.log("after all return get >>>" + x);
+						console.log("call goodBye");
+						return request("/fun/test/goodbye");
+					});
+
+					goodbye.on("success", function(x) {
+						console.log("goodbye ? >>>" + x);
+					});
+
+					var fd = Promise.foldLeft([ requesta, requestc, goodbye ], [],
+							function(array, x) {
+								array.push(x);
+								return array;
+							});
+					fd.on("success", function(x) {
+						console.log("foldLeft called get >>>" + x);
+					});
+				});
+	</script>
+</body>
+</html>
