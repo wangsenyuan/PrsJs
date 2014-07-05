@@ -3,7 +3,7 @@ PrsJs
 
 A simple implementation of Promise pattern for JavaScript 
 
-var requesta = request("/fun/test/hello");
+					var requesta = request("/fun/test/hello");
 
 					var requestc = request("/fun/test/world");
 
